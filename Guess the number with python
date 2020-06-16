@@ -1,0 +1,66 @@
+# Rules:
+# You can key in n as the range and python will randomly pick a integer (0,n) as its answer
+# Feature:
+# 1. Python will remind you whehter you guess is too big or too small
+# 2. if you accidentally key in a non-int, you will be reminded this is not a integer
+# 3. if you want to quit in between, there is instruction that you can leave as long as enter a number larger than range
+# 4. if you key in a number that has already been guessed, you will be reminded you and ask you to guess again
+# 5. At the end, there is a guess count to show how many times you try
+
+from random import randrange
+
+
+def guess_game():
+    n = int(input("Please decide the range for your guess game "))
+    answer = randrange(0, n)
+    guess_list = []
+    guess = float(input("Please type your guess "))
+    count = 1
+    integer_check(guess, count)
+    guess_list.append(guess)
+    compare(guess, answer, count, n, guess_list)
+
+
+def compare(a, b, c, n, l):
+    while a != b:
+        if a < b:
+            print(f"Your guess is smaller then the answer. If you want to leave type in any number larger than {n}.")
+            a = float(input("Please type in again "))
+            exit_check(a, b, n)
+            integer_check(a, c)
+            reoccur(a, b, c, n, l)
+            c += 1
+        else:
+            print(f"Your guess is larger then the answer. If you want to leave type in any number larger than {n}.")
+            a = float(input("Please type in again "))
+            exit_check(a, b, n)
+            integer_check(a, c)
+            reoccur(a, b, c, n, l)
+            c += 1
+    print(f"After {c} counts, you achieve the correct answer{b}")
+
+
+def integer_check(x, c):
+    while int(x) != x:
+        x = float(input("Please type in an integer guess "))
+        c += 1
+    return (int(x), c)
+
+def exit_check(a, b, n):
+    if a > n:
+        print(f'Fail. You leave before getting correct answer {b}')
+        exit()
+
+def reoccur(a, b, c, n, l):
+    if a in l:
+        a = float(input("You have already guessed this number. Please type in a different integer "))
+        c += 1
+        compare(a, b, c, n, l)
+    else:
+        l.append(a)
+        return (a, b, c, n, l)
+
+
+
+guess_game()
+                
